@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from razrabot_todo_list.db import get_tasks, insert_task, get_task_by_id, update_task_by_id, del_task
+from razrabot_todo_list.validator import get_validate_elem
 
 
 app = Flask(__name__)
@@ -32,6 +33,9 @@ def add_task():
     title = data.get('title')
     description = data.get('description', '')
     task = insert_task(title, description)
+    errors = get_validate_elem(title, description)
+    if errors:
+        return jsonify(errors)
     if task:
         return jsonify(task), 201
     return jsonify({'error': 'Не удалось добавить задачу'}), 400
