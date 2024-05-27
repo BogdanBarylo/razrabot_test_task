@@ -1,23 +1,34 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
+from urllib.parse import urlparse
 
 load_dotenv()
-user = os.getenv('DATABASE_USER')
-password = os.getenv('DATABASE_PASSWORD')
-host = os.getenv('DATABASE_HOST')
+url = urlparse(os.getenv('DATABASE_URL'))
+db_config = {
+    'user': url.username,
+    'password': url.password,
+    'host': url.hostname,
+    'database': url.path[1:],
+    'port': url.port
+}
 
 
 def setup_database():
     # Создание базы данных, если она не существует
-    cnx = mysql.connector.connect(user=user, password=password, host=host)
+    cnx = mysql.connector.connect(user=db_config['user'],
+                                       password=db_config['password'],
+                                       host=db_config['host'],
+                                       database='tasks_db')
     cursor = cnx.cursor()
     cursor.execute("CREATE DATABASE IF NOT EXISTS tasks_db")
     cursor.close()
     cnx.close()
-
     # Подключение к созданной базе данных и создание таблицы, если она не существует
-    cnx = mysql.connector.connect(user=user, password=password, host=host, database='tasks_db')
+    cnx = mysql.connector.connect(user=db_config['user'],
+                                       password=db_config['password'],
+                                       host=db_config['host'],
+                                       database='tasks_db')
     cursor = cnx.cursor()
     create_table_query = """
     CREATE TABLE IF NOT EXISTS tasks (

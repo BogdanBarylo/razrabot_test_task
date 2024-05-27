@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request
 from razrabot_todo_list.db import (get_tasks, insert_task,
                                    get_task_by_id, update_task_by_id,
                                    del_task)
-from razrabot_todo_list.validator import get_validate_elem
+from marshmallow import ValidationError
+from razrabot_todo_list.validator import TaskSchema, TaskUpdateSchema
 
 
 app = Flask(__name__)
@@ -18,11 +19,6 @@ def internal_error(error):
     return jsonify({'error': 'Внутренняя ошибка сервера'}), 500
 
 
-@app.get('/')
-def get_index():
-    return jsonify('Сервер запущен'), 200
-
-
 @app.get('/tasks')
 def get_all_tasks():
     tasks = get_tasks()
@@ -32,11 +28,13 @@ def get_all_tasks():
 @app.post('/tasks')
 def add_task():
     data = request.json
-    title = data.get('title', '')
-    description = data.get('description', '')
-    errors = get_validate_elem(title, description)
-    if errors:
-        return jsonify(errors)
+    schema = TaskSchema()
+    try:
+        validated_data = schema.load(data)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+    title = validated_data['title']
+    description = validated_data.get('description', '')
     task = insert_task(title, description)
     if task:
         return jsonify(task), 201
@@ -54,9 +52,14 @@ def get_task(id):
 @app.put('/tasks/<int:id>')
 def update_task(id):
     data = request.json
-    title = data.get('title')
-    description = data.get('description', '')
-    task = update_task_by_id(id, description, title)
+    schema = TaskUpdateSchema()
+    try:
+        validated_data = schema.load(data)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+    title = validated_data.get('title')
+    description = validated_data.get('description', '')
+    task = update_task_by_id(id, title, description)
     if task:
         return jsonify(task), 200
     return jsonify({'error': 'Не удалось обновить задачу'}), 400

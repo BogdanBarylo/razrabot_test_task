@@ -1,19 +1,26 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-
+from urllib.parse import urlparse
 
 load_dotenv()
-user = os.getenv('DATABASE_USER')
-password = os.getenv('DATABASE_PASSWORD')
-host = os.getenv('DATABASE_HOST')
+url = urlparse(os.getenv('DATABASE_URL'))
+db_config = {
+    'user': url.username,
+    'password': url.password,
+    'host': url.hostname,
+    'database': url.path[1:],
+    'port': url.port
+}
 
 
 # Создаем декоратор, что бы избежать дублирования кода
 def open_db(func):
     def wrapper(*args, **kwargs):
-        conn = mysql.connector.connect(user=user, password=password,
-                                       host=host, database='tasks_db')
+        conn = mysql.connector.connect(user=db_config['user'],
+                                       password=db_config['password'],
+                                       host=db_config['host'],
+                                       database='tasks_db')
         with conn:
             curs = conn.cursor(dictionary=True)
             result = func(curs, *args, **kwargs)
@@ -59,5 +66,9 @@ def update_task_by_id(curs, id, title, description):
 
 @open_db
 def del_task(curs, id):
-    curs.execute('DELETE FROM tasks WHERE id = %s', (id,))
-    return curs.rowcount > 0
+    curs.execute('SELECT * FROM tasks WHERE id = %s', (id,))
+    task = curs.fetchone()
+    if task:
+        curs.execute('DELETE FROM tasks WHERE id = %s', (id,))
+        return True
+    return False

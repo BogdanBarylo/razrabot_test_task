@@ -1,10 +1,12 @@
-def get_validate_elem(title, description):
-    errors = []
-    if not title:
-        errors.append('title обязателен')
-        return errors
-    if len(title) > 255:
-        errors.append('title превышает 255 символов')
-    if len(description) > 255:
-        errors.append('description превышает 255 символов')
-    return errors
+from marshmallow import Schema, fields, validate
+
+
+class TaskSchema(Schema):
+    title = fields.String(required=True, validate=validate.Length(min=1,
+                                                                  max=255))
+    description = fields.String(validate=validate.Length(max=255))
+
+
+class TaskUpdateSchema(Schema):
+    title = fields.String(validate=validate.Length(min=1, max=255))
+    description = fields.String(validate=validate.Length(max=255))
