@@ -73,21 +73,6 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
-name = "flask-mysql"
-version = "1.5.2"
-description = "Flask simple mysql client"
-optional = false
-python-versions = "*"
-files = [
-    {file = "Flask-MySQL-1.5.2.tar.gz", hash = "sha256:6d50e6560c88a48414dd63df790cb29ed927d41edfb21b572d6e7b530f15dfcd"},
-    {file = "Flask_MySQL-1.5.2-py2.py3-none-any.whl", hash = "sha256:d05b5c4c87ecf8468633d5d623b94c99b02f3ad66f89797718c0e2c8ff425bd3"},
-]
-
-[package.dependencies]
-Flask = "*"
-PyMySQL = "*"
-
-[[package]]
 name = "iniconfig"
 version = "2.0.0"
 description = "brain-dead simple config-ini parsing"
@@ -273,21 +258,6 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
-name = "pymysql"
-version = "1.1.1"
-description = "Pure Python MySQL Driver"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "PyMySQL-1.1.1-py3-none-any.whl", hash = "sha256:4de15da4c61dc132f4fb9ab763063e693d521a80fd0e87943b9a453dd4c19d6c"},
-    {file = "pymysql-1.1.1.tar.gz", hash = "sha256:e127611aaf2b417403c60bf4dc570124aeb4a57f5f37b8e95ae399a42f904cd0"},
-]
-
-[package.extras]
-ed25519 = ["PyNaCl (>=1.4.0)"]
-rsa = ["cryptography"]
-
-[[package]]
 name = "pytest"
 version = "8.2.1"
 description = "pytest: simple powerful testing with Python"
@@ -354,4 +324,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ab4057d740ee5b9af13e793eaad72b17b8c70858f1fd2168d948174da0bd938e"
+content-hash = "b4f9eff5c02ace00d08306f56eabf50af6e7d316d6422410e24264354d242b2b"

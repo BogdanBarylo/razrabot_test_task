@@ -18,7 +18,7 @@ def internal_error(error):
 
 @app.get('/')
 def get_index():
-    return jsonify({'message': 'Сервер запущен'}), 200
+    return jsonify('Сервер запущен'), 200
 
 
 @app.get('/tasks')
@@ -30,7 +30,7 @@ def get_all_tasks():
 @app.post('/tasks')
 def add_task():
     data = request.json
-    title = data.get('title')
+    title = data.get('title', '')
     description = data.get('description', '')
     errors = get_validate_elem(title, description)
     if errors:

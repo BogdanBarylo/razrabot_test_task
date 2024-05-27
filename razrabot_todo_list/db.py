@@ -58,3 +58,5 @@ def update_task_by_id(curs, id, title, description):
 @open_db
 def del_task(curs, id):
     curs.execute('DELETE FROM tasks WHERE id = %s', (id,))
+    return curs.rowcount > 0
+
