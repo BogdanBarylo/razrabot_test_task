@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request
-from razrabot_todo_list.db import get_tasks, insert_task, get_task_by_id, update_task_by_id, del_task
+from razrabot_todo_list.db import (get_tasks, insert_task,
+                                   get_task_by_id, update_task_by_id,
+                                   del_task)
 from razrabot_todo_list.validator import get_validate_elem
 
 
