@@ -32,10 +32,10 @@ def add_task():
     data = request.json
     title = data.get('title')
     description = data.get('description', '')
-    task = insert_task(title, description)
     errors = get_validate_elem(title, description)
     if errors:
         return jsonify(errors)
+    task = insert_task(title, description)
     if task:
         return jsonify(task), 201
     return jsonify({'error': 'Не удалось добавить задачу'}), 400
