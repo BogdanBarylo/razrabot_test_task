@@ -63,5 +63,5 @@ def update_task(id):
 @app.delete('/tasks/<int:id>')
 def delete_task(id):
     if del_task(id):
-        return jsonify({'message': 'Запись успешно удалена'}), 200
+        return 'Запись успешно удалена', 200
     return jsonify({'error': 'Задача не найдена'}), 404
