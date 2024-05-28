@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from urllib.parse import urlparse
 
+
 load_dotenv()
 url = urlparse(os.getenv('DATABASE_URL'))
 db_config = {
@@ -72,3 +73,8 @@ def del_task(curs, id):
         curs.execute('DELETE FROM tasks WHERE id = %s', (id,))
         return True
     return False
+
+# Для использования в тестах
+@open_db
+def clear_db(curs):
+    curs.execute('TRUNCATE TABLE tasks')

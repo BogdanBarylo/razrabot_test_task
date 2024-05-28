@@ -37,7 +37,7 @@ def add_task():
     description = validated_data.get('description', '')
     task = insert_task(title, description)
     if task:
-        return jsonify(task), 201
+        return jsonify(task), 200
     return jsonify({'error': 'Не удалось добавить задачу'}), 400
 
 
@@ -68,5 +68,5 @@ def update_task(id):
 @app.delete('/tasks/<int:id>')
 def delete_task(id):
     if del_task(id):
-        return 'Запись успешно удалена', 200
+        return 'Задача успешно удалена', 200
     return jsonify({'error': 'Задача не найдена'}), 404
